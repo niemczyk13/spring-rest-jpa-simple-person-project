@@ -52,6 +52,6 @@ public class PersonController {
 	@GetMapping("/person/delete")
 	public ResponseEntity<?> delete(long id) {
 		personService.delete(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(personService.list(), HttpStatus.OK);
 	}
 }
