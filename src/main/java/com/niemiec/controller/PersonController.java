@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.niemiec.model.Person;
@@ -31,7 +34,7 @@ public class PersonController {
 		return new ResponseEntity<Person>(person, HttpStatus.OK);
 	}
 	
-	@GetMapping("/person/save")
+	@PostMapping("/person/save")
 	public ResponseEntity<Person> save(Person person) {
 		personService.save(person);
 		return new ResponseEntity<Person>(person, HttpStatus.OK);

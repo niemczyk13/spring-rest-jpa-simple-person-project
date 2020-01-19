@@ -21,8 +21,6 @@ public class PersonDAOImpl implements PersonDAO {
 		this.personRepository = personRepository;
 	}
 
-
-
 	@Override
 	public List<Person> list() {
 		return personRepository.findAll();
@@ -49,4 +47,8 @@ public class PersonDAOImpl implements PersonDAO {
 		personRepository.deleteById(id);
 	}
 
+	@Override
+	public Person get(String email) {
+		return personRepository.findByEmail(email);
+	}
 }
