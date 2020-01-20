@@ -39,7 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 				.exceptionHandling()
 				.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-				
+		
+		//for run h2 console
+		http.headers().frameOptions().disable();
+	
 	}
 
 	@Bean
