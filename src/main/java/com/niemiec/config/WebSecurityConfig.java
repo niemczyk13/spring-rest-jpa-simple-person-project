@@ -13,14 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.stereotype.Controller;
 
+import static com.niemiec.config.SecurityConstants.*;
+
 
 @Controller
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	AuthenticationService authenticationService;
-
+	private AuthenticationService authenticationService;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
@@ -29,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/person/delete").hasAuthority(SecurityConstants.ROLE_ADMIN)
+				.antMatchers(HttpMethod.GET, "/person/delete").hasAuthority(ROLE_ADMIN)
 				.anyRequest().permitAll()
 //				.and()
 //				.requiresChannel().antMatchers(HttpMethod.POST, "/person/save").requiresSecure()
@@ -37,6 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.formLogin().permitAll()
 				.and()
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+//				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//				.and()
 				.exceptionHandling()
 				.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 		

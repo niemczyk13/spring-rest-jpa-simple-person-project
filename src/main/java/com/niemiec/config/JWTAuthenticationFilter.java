@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,15 +60,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		UserDetails principal = (UserDetails) authResult.getPrincipal();
 		String token = createToken(principal);
-		response.getOutputStream().print("{\"token\": \"" + token + "\"}");
-//		response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+//		response.getOutputStream().print("{\"token\": \"" + token + "\"}");
+		response.addHeader(TOKEN_HEADER, TOKEN_PREFIX + token);
 	}
 
 	private String createToken(UserDetails principal) {
 		return JWT.create()
 				.withSubject(principal.getUsername())
 				.withExpiresAt(createAnExpirationDate(EXPIRATION_TIME))
-				.sign(Algorithm.HMAC256(SECRET));
+				.sign(ALGORITHM(SECRET));
 	}
 
 	private Date createAnExpirationDate(long expirationTime) {
