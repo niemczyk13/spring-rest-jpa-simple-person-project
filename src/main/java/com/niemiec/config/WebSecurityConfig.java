@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/person/delete").hasAuthority(ROLE_ADMIN)
+				.antMatchers(HttpMethod.GET, "/person/delete").hasRole(ROLE_ADMIN)
 				.anyRequest().permitAll()
 //				.and()
 //				.requiresChannel().antMatchers(HttpMethod.POST, "/person/save").requiresSecure()
