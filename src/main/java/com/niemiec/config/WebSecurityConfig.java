@@ -8,12 +8,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.stereotype.Controller;
-
-import com.niemiec.dao.PersonDAO;
 
 import static com.niemiec.config.SecurityConstants.*;
 
@@ -26,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationService authenticationService;
 	
 	@Autowired
-	private PersonDAO personDAO;
+	private UserDetailsService userDetailsService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.formLogin().permitAll()
 				.and()
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-				.addFilter(new JWTAuthorizationFilter(authenticationManager(), personDAO))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager(), userDetailsService))
 //				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //				.and()
 				.exceptionHandling()
